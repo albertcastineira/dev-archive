@@ -209,3 +209,100 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 ```
+
+### 5: Creating a login form
+The last part is create a view with a from that uses all the methods required:
+
+**LoginView.jsx**
+```
+import { useState } from 'react';
+import { AuthData } from '../auth/AuthWrapper';
+import { useNavigate } from "react-router-dom";
+
+export default function Login() {
+    const navigate = useNavigate();
+    const { login } = AuthData();
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
+    const [error, setError] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            await login(formData.username, formData.password);
+            navigate("/dashboard")
+        } catch (err) {
+            setError(err);
+        }
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    return (
+        <>
+            <div>
+                    <form onSubmit={handleSubmit}>
+
+                        <p>{error}</p>
+
+                        <label>Enter your username</label>
+                        <input 
+                            type="text" 
+                            name="username" 
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            spellCheck={false}
+                            autoComplete="off"
+                            required  
+                        />
+
+                        <label>Enter your password</label>
+                        <input 
+                            type="password" 
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            spellCheck={false}
+                            autoComplete="off"
+                            required 
+                        />
+
+                        <button 
+                        type="submit">
+                        LOGIN
+                        </button>
+                    </form>
+                </div>
+        </>
+    );
+}
+
+```
+
+The username and password fields are part of a form data that we will send to the API Auth Endpoint.
+
+### 6: Checking the response
+The last part is checking the server response. If the login is succesfull it will return this on the endpoint: 
+
+```http://localhost:8080/api/users/auth```
+
+**JSON Endpoint Response**
+```
+// Status : 200 OK
+{
+    "status": "success",
+    "message": "Login successful",
+    "username": "Username"
+}
+```
+
+> Warning: If the API has a security system remember to check the headers, or it will return a 401 Unauthorized Status
