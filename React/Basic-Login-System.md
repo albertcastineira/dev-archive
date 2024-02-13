@@ -5,7 +5,7 @@
 - API Auth endpoint
 ---
 
-> We will use the [🔐Basic Authentication System]() example on this case.
+> We will use the [🔐Basic Authentication System](https://github.com/albertcastineira/dev-archive/blob/main/Springboot/Basic-Authentication-System.md) example on this case.
 
 ### 1: Creating an AuthWrapper
 The AuthWrapper will be like a box where we define all the needs for the login purposes.
